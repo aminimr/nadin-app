@@ -33,6 +33,10 @@
                 </template>
             </a-list>
         </div>
+        <div v-if="testMode" style="width: 200px; padding: 4px">
+            <button type="button" id="btn-save" style="width: 100%;margin-bottom: 4px;" @click="saveChanges">Submit</button>
+            <div id="test-result" style="width: 100%; text-align: center; background-color: green; color: #fff;">{{result}}</div>
+        </div>
     </section>
 </template>
 <style lang="scss">
@@ -45,6 +49,9 @@
 import {ref} from 'vue';
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons-vue';
 
+const props = defineProps({
+    testMode: Boolean
+})
 const newTodoTitle = ref('')
 const todos = ref([
     {
@@ -78,5 +85,11 @@ function addTodo() {
     })
 
     newTodoTitle.value = ''
+}
+
+const result = ref('')
+function saveChanges(){
+    result.value = 'test is done.'
+    document.querySelector('#btn-save').innerText = 'Clicked'
 }
 </script>

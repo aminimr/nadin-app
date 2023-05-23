@@ -11,7 +11,7 @@
                 Login
             </div>
             <label>
-                Username
+                User Name:
             </label>
             <a-form-item
 
@@ -25,7 +25,7 @@
                 </a-input>
             </a-form-item>
             <label>
-                Password
+                Password:
             </label>
             <a-form-item
                     name="password"
@@ -51,8 +51,6 @@
 import {ref, computed} from 'vue';
 import {UserOutlined, LockOutlined} from '@ant-design/icons-vue';
 
-const disabled = computed(() => !(formModel.value.username && formModel.value.password))
-
 import {useAuthStore} from '@/stores/auth';
 import {useRoute, useRouter} from "vue-router";
 
@@ -63,6 +61,7 @@ const formModel = ref({
     username: 'admin',
     password: 'admin'
 })
+const disabled = computed(() => !(formModel.value?.username && formModel.value?.password))
 
 function onFinish() {
     auth.login(formModel.value).then(() => {

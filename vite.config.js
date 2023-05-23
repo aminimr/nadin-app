@@ -11,7 +11,7 @@ export default defineConfig({
         vue({reactivityTransform: true}),
         VueI18nPlugin({
             runtimeOnly: false, // <---
-            include: resolve(dirname(fileURLToPath(import.meta.url)), './src/i18n/locales/**'),
+            // include: resolve(dirname(fileURLToPath(import.meta.url)), './src/i18n/locales/**'),
         }),
         // Components({
         //     resolvers: [AntDesignVueResolver()],

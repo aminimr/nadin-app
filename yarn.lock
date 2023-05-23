@@ -814,6 +814,14 @@ csstype@^3.1.1:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.2.tgz#1d4bf9d572f11c14031f0436e1c10bc1f571f50b"
   integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
 
+cypress-vite@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/cypress-vite/-/cypress-vite-1.4.0.tgz#4d2889d62c11aed7188b1082af16210240aac2e6"
+  integrity sha512-BHmOku8q6nRtDGPiBcE7zcAZs56/OsiX5SFoldHEMSQ+I6nnPUU2tcrRNeRsCArONQAvwTu2Da7R/rFGA/DSEg==
+  dependencies:
+    chokidar "^3.5.3"
+    debug "^4.3.4"
+
 cypress@^12.12.0:
   version "12.12.0"
   resolved "https://registry.yarnpkg.com/cypress/-/cypress-12.12.0.tgz#0da622a34c970d8699ca6562d8e905ed7ce33c77"
