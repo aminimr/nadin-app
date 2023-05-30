@@ -1,16 +1,17 @@
 import {defineStore} from 'pinia'
 import {ref} from 'vue'
-import { ConfigProvider } from 'ant-design-vue';
+import {ConfigProvider} from 'ant-design-vue';
 
 export const useThemeStore = defineStore('theme', () => {
     const DEFAULT_THEME = 'blue'
     const allowedThemes = ['green', 'blue', 'yellow']
-    const theme = ref('')
+    const theme = ref<string>('')
 
-    function initTheme(){
+    function initTheme() {
         changeTheme(DEFAULT_THEME)
     }
-    function changeTheme(value) {
+
+    function changeTheme(value: string) {
         if (!allowedThemes.includes(value)) return
         theme.value = value
 

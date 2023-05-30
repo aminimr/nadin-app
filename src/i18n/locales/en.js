@@ -1,5 +1,8 @@
 export const common = {
     username: 'User Name',
+    password: 'password',
+    userNameValidateMessage: 'please enter your username',
+    passwordValidateMessage: 'please enter your password',
     theme: 'Theme',
     language: 'Language',
     preview: 'preview',
@@ -14,7 +17,12 @@ export const common = {
 }
 
 export const messages = {
-    'greeting': 'Good {status}, {username}'
+    'greeting': 'Good {status}, {username}',
+    'loginSuccess': 'Login Success',
+    'loginError': 'Please check your username or password',
+    'loginFailed': 'username or password is wrong',
+    'logoutSuccess': 'successfully logged out',
+    'changeNameSuccess': 'username successfully changed'
 }
 
 export const weather = {

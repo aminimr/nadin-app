@@ -1,5 +1,8 @@
 export const common = {
     username: 'نام کاربری',
+    password: 'رمز عبور',
+    userNameValidateMessage: 'لطفا نام کاربری را وارد کنید',
+    passwordValidateMessage: 'لطفا رمز عبور را وارد کنید',
     theme: 'قالب',
     language: 'زبان',
     preview: 'پیش نمایش',
@@ -14,7 +17,12 @@ export const common = {
 }
 
 export const messages = {
-    'greeting': '{status} بخیر, {username}'
+    'greeting': '{status} بخیر, {username}',
+    'loginSuccess': 'ورود با موفقیت انجام شد',
+    'loginError': 'لصفا نام کاربری یا رمز عبور خود را بررسی کنید',
+    'loginFailed': 'نام کاربری یا رمز عبور اشتباه است',
+    'logoutSuccess': 'خروج با موفقیت انجام شد',
+    'changeNameSuccess' : 'نام کاربری با موفقیت ثبت شد'
 }
 
 export const weather = {

@@ -1,21 +1,20 @@
 <script setup>
-import {useThemeStore} from "@/stores/theme.js";
-import {useAuthStore} from "@/stores/auth.js";
-import {computed, ref} from "vue";
+import {useAuthStore} from "@/stores/auth.ts";
+import {useI18n} from "vue-i18n";
 import TimeStatus from '@/components/TimeStatus.vue'
 import dayjs from "dayjs";
+import {getCurrentTimeStatus} from "@/utils/DateTimeHelper";
 
-const authStore = useAuthStore()
-const username = authStore.userInfo?.username
 const time = dayjs().format('H:mm')
+const dayStatus = getCurrentTimeStatus()
 
-const date = new Date;
-let hours = date.getHours();
-let dayStatus =
-    (hours < 12) ? "Morning" :
-        ((hours <= 18 && hours >= 12) ? "Afternoon" :
-            "Evening");
+const auth = useAuthStore()
+const {t} = useI18n()
 
+const displayMessage = t('messages.greeting', {
+    status: t(`common.${dayStatus}`),
+    username: auth.displayName
+})
 </script>
 
 <template>
@@ -23,18 +22,11 @@ let dayStatus =
         <div class="center dashboard">
             <div class="time">{{ time }}</div>
             <div class="greeting">
-                <TimeStatus/>&nbsp;{{ $t('messages.greeting', {status: $t(`common.${dayStatus}`), username}) }}
+                <TimeStatus/>&nbsp;{{ displayMessage }}
             </div>
         </div>
     </div>
 
-  <!--    <div>-->
-  <!--        <a-button type="primary" @click="changeTheme('dark')">DARK</a-button>-->
-  <!--        &nbsp;|&nbsp;-->
-  <!--        <a-button type="primary" @click="changeTheme('blue')">BLUE</a-button>-->
-  <!--        &nbsp;|&nbsp;-->
-  <!--        <a-button type="primary" @click="changeTheme('light')">LIGHT</a-button>-->
-  <!--    </div>-->
 </template>
 <style lang="scss">
 .dashboard {
@@ -49,10 +41,6 @@ let dayStatus =
     font-weight: bold;
     line-height: 1;
     margin-bottom: 24px;
-
-    .time-format {
-
-    }
   }
 
   .greeting {

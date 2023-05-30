@@ -1,0 +1,11 @@
+[
+  {
+    "userId": "e18a7882-5c55-489f-b371-11f7a965a7ca",
+    "username": "admin",
+    "password": "Admin@123",
+    "fullName": "Admin",
+    "lang": "fa",
+    "theme": "green",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+  }
+]

@@ -4,73 +4,97 @@
                 :model="formModel"
                 name="normal_login"
                 class="login-form"
+                :rules="rules"
                 @finish="onFinish"
                 @finishFailed="onFinishFailed"
         >
             <div style="font-size: 22px ; text-align: center ; margin:10px 0">
-                Login
+                {{ $t(`common.login`) }}
             </div>
             <label>
-                User Name:
+                {{ $t(`common.username`) }}
             </label>
             <a-form-item
-
+                    style="margin-top:5px"
+                    ref="username"
                     name="username"
-                    :rules="[{ required: true, message: 'Please input your username!' }]"
             >
-                <a-input v-model:value="formModel.username">
-                    <template #prefix>
-                        <UserOutlined class="site-form-item-icon"/>
-                    </template>
-                </a-input>
+                <a-input v-model:value="formModel.username"/>
             </a-form-item>
             <label>
-                Password:
+                {{ $t(`common.password`) }}
             </label>
             <a-form-item
+                    style="margin-top:5px"
                     name="password"
-                    :rules="[{ required: true, message: 'Please input your password!' }]"
+                    ref="password"
             >
-                <a-input-password v-model:value="formModel.password">
-                    <template #prefix>
-                        <LockOutlined class="site-form-item-icon"/>
-                    </template>
-                </a-input-password>
+                <a-input-password v-model:value="formModel.password"/>
             </a-form-item>
 
-            <a-form-item>
-                <a-button style="width: 100%" :disabled="disabled" type="primary" html-type="submit"
+            <a-form-item style="margin-top: 20px">
+                <a-button style="width: 100%" type="primary" html-type="submit"
                           class="login-form-button">
-                    Log in
+                    {{ $t('common.login') }}
                 </a-button>
             </a-form-item>
         </a-form>
     </div>
 </template>
-<script setup>
-import {ref, computed} from 'vue';
-import {UserOutlined, LockOutlined} from '@ant-design/icons-vue';
+<script setup lang="ts">
+import {reactive} from 'vue';
+import {useAuthStore} from '@/stores/auth.js';
+import {useRouter} from "vue-router";
+import {useI18n} from "vue-i18n";
+import {formValidator} from '@/utils/FormValidator'
+import {useNotification} from "@/utils/NotificationManager";
+import {AuthUser} from "@/services/authService";
+import {useThemeStore} from "@/stores/theme";
 
-import {useAuthStore} from '@/stores/auth';
-import {useRoute, useRouter} from "vue-router";
 
 const router = useRouter()
 const auth = useAuthStore()
-const route = useRoute()
-const formModel = ref({
-    username: 'admin',
-    password: 'admin'
-})
-const disabled = computed(() => !(formModel.value?.username && formModel.value?.password))
+const theme = useThemeStore()
+const {t} = useI18n()
+const {showSuccess, showError} = useNotification()
+
+// Form Model
+const formModel = reactive<AuthUser>({
+    username: "admin",
+    password: "Admin@123",
+    persist: true
+});
 
 function onFinish() {
-    auth.login(formModel.value).then(() => {
-        router.replace({path: '/'}) // route.query?.redirect || '/'
+    auth.login(formModel).then((res) => {
+        if (res.success) {
+            showSuccess(`${t('messages.loginSuccess')}`)
+            console.log('login', res)
+            if (res.data.user.theme) theme.changeTheme(res.data.user.theme)
+            router.replace({path: '/'})
+        } else {
+            showError(`${t('messages.loginFailed')}`)
+        }
     })
 }
 
 function onFinishFailed() {
-    alert('نام کاربری یا کلمه عبور صحیح نمی باشد.')
+    showError(`${t('messages.loginError')}`)
+}
+
+const rules = {
+    username: {
+        type: 'string',
+        required: true,
+        validator: formValidator(/[a-zA-Z0-9@.]/, t('common.userNameValidateMessage')),
+        trigger: 'change',
+    },
+    password: {
+        type: 'string',
+        required: true,
+        validator: formValidator(/^[a-zA-Z0-9!@#$%^&*]{6,16}$/, t('common.passwordValidateMessage')),
+        trigger: 'change',
+    }
 }
 
 </script>

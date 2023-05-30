@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import {useAuthStore} from "@/stores/auth.js";
+import {useAuthStore} from "@/stores/auth.ts";
 
 import Dashboard from '../views/Dashboard.vue'
 
@@ -49,6 +49,6 @@ router.beforeEach(async (to, from, next) => {
     const auth = useAuthStore()
     if (auth.isLoggedIn || !!to.meta.public) return next()
 
-    return next({path: 'login', query: {redirect: to.fullPath}})
+    return next({path: 'login'})
 })
 export default router

@@ -33,7 +33,7 @@ import {
     AppstoreOutlined,
     CloudOutlined
 } from '@ant-design/icons-vue';
-import {nextTick, onMounted, ref, watch} from 'vue'
+import {ref} from 'vue'
 import {useRouter} from 'vue-router'
 
 const router = useRouter()
