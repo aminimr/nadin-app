@@ -3,11 +3,13 @@ import {ref, reactive} from 'vue';
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons-vue';
 import {formValidator} from "../utils/FormValidator";
 import {useI18n} from "vue-i18n";
+import {useNotification} from "@/utils/NotificationManager";
 
 const {t} = useI18n()
 const props = defineProps({
     testMode: Boolean
 })
+const {showSuccess, showError} = useNotification()
 
 interface IFormModel {
     title: string,
@@ -21,11 +23,11 @@ const formModel = reactive<IFormModel>({
 
 
 const rules = {
-    newTodo:
+    title:
         {
             type: 'string',
             required: true,
-            validator: formValidator(/[a-zA-Z0-9@.]/, t('common.userNameValidateMessage'))
+            validator: formValidator(/[a-zA-Z0-9@.]/, t('messages.todoFill'))
         }
 }
 const todos = ref([
@@ -47,26 +49,24 @@ const todos = ref([
     },
 ]);
 
-function removeTodo(item) {
+function removeTodo(item: object) {
     todos.value = todos.value.filter(todo => item !== todo)
 }
 
 function addTodo() {
-    if (!formModel.title.trim()) return
+    if (!formModel.title.trim()) {
+        return showError(`${t('messages.todoFill')}`)
+    }
     todos.value.push({
         ...formModel
     })
-
+    showSuccess(`${t('messages.todoFill')}`)
     formModel.title = ''
     formModel.checked = false
 }
 
 const result = ref('')
 
-function saveChanges() {
-    result.value = 'test is done.'
-    document.querySelector('#btn-save').innerText = 'Clicked'
-}
 </script>
 
 <template>
@@ -79,32 +79,20 @@ function saveChanges() {
                     :rules="rules"
             >
                 <a-form-item
-                        label="newTodo"
-                        name="newTodo"
-
-                >
-                    <a-input v-model:value="formModel.title">
-                        <template #prefix>
-                            <UserOutlined class="site-form-item-icon"/>
+                        ref="title"
+                        name="title">
+                    <a-input
+                            @keydown.enter="addTodo" size="large" v-model:value="formModel.title"
+                            :placeholder="$t('common.title')">
+                        <template #suffix>
+                            <PlusOutlined @click="addTodo"
+                                          html-type="submit"
+                                          :style="{fontSize: '18px', color: '#777'}"/>
                         </template>
                     </a-input>
                 </a-form-item>
+
             </a-form>
-
-
-            <!--            <a-form-item-->
-            <!--                ref="newTodo"-->
-            <!--                name="newTodo">-->
-            <!--                <a-input-->
-            <!--                    @keydown.enter="addTodo" size="large" v-model:value="formModel.title"-->
-            <!--                    :placeholder="$t('common.title')">-->
-            <!--                    <template #suffix>-->
-            <!--                        <PlusOutlined @click="addTodo"-->
-
-            <!--                                      :style="{fontSize: '18px', color: '#777'}"/>-->
-            <!--                    </template>-->
-            <!--                </a-input>-->
-            <!--            </a-form-item>-->
 
 
             <a-list item-layout="horizontal" style="min-width: 350px ; max-width: 600px" :data-source="todos">
@@ -113,8 +101,7 @@ function saveChanges() {
                         <template #actions>
                             <DeleteOutlined @click="removeTodo(item)" :style="{fontSize: '18px', color: '#777'}"/>
                         </template>
-                        <a-list-item-meta
-                        >
+                        <a-list-item-meta>
                             <template #title>
                                 <a-checkbox :class="{'todo-checked': item.checked}" v-model:checked="item.checked">
                                     {{ item.title }}
@@ -124,13 +111,6 @@ function saveChanges() {
                     </a-list-item>
                 </template>
             </a-list>
-        </div>
-        <div v-if="testMode" style="width: 200px; padding: 4px">
-            <button type="button" id="btn-save" style="width: 100%;margin-bottom: 4px;" @click="saveChanges">Submit
-            </button>
-            <div id="test-result" style="width: 100%; text-align: center; background-color: green; color: #fff;">
-                {{ result }}
-            </div>
         </div>
     </section>
 </template>

@@ -23,23 +23,71 @@
                 <user-outlined/>
                 <span class="nav-text">{{ $t('sidebar.profile') }}</span>
             </a-menu-item>
+            <a-menu-item key="logout">
+                <export-outlined/>
+                <span class="nav-text">{{ $t('sidebar.logout') }}</span>
+                <a-modal v-model:visible="visible">
+                    <p>{{ $t('sidebar.logOutMessage') }}</p>
+                    <template #footer>
+                        <a-button key="back" @click="handleCancel">{{ $t('sidebar.cancel') }}</a-button>
+                        <a-button key="submit" type="primary" :loading="loading" @click="handleOk">{{
+                            $t('sidebar.logout')
+                            }}</a-button>
+                    </template>
+                </a-modal>
+            </a-menu-item>
         </a-menu>
     </a-layout-sider>
 </template>
-<script setup>
+<script setup lang="ts">
 import {
     UserOutlined,
     ProfileOutlined,
     AppstoreOutlined,
-    CloudOutlined
+    CloudOutlined,
+    ExportOutlined
 } from '@ant-design/icons-vue';
 import {ref} from 'vue'
 import {useRouter} from 'vue-router'
+import {useAuthStore} from "@/stores/auth";
+import {useNotification} from "@/utils/NotificationManager";
+import {useI18n} from "vue-i18n";
 
+const {showSuccess} = useNotification()
 const router = useRouter()
 const selectedMenu = ref(['dashboard'])
+const authStore = useAuthStore()
+const {t} = useI18n()
+
+const visible = ref<boolean>(false);
+const loading = ref<boolean>(false);
+const showModal = () => {
+    visible.value = true;
+};
+
+const handleOk = () => {
+    logOut()
+    setTimeout(() => {
+        loading.value = false;
+        visible.value = false;
+    }, 2000);
+};
+
+const handleCancel = () => {
+    visible.value = false;
+};
+
+function logOut() {
+    authStore.logout()
+    router.replace({path: '/login'})
+    showSuccess(`${t('messages.logoutSuccess')}`)
+}
 
 function onMenuClicked({key}) {
+    if (key === 'logout') {
+
+        return showModal()
+    }
     router.push(key === 'dashboard' ? '/' : key)
 }
 </script>

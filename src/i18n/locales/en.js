@@ -22,7 +22,8 @@ export const messages = {
     'loginError': 'Please check your username or password',
     'loginFailed': 'username or password is wrong',
     'logoutSuccess': 'successfully logged out',
-    'changeNameSuccess': 'username successfully changed'
+    'changeNameSuccess': 'username successfully changed',
+    'todoFill': 'Please fill the Title',
 }
 
 export const weather = {
@@ -44,5 +45,8 @@ export const sidebar = {
     dashboard: 'Dashboard',
     todos: 'Todos',
     weather: 'Weather',
-    profile: 'Profile'
+    profile: 'Profile',
+    logout: 'Logout',
+    logOutMessage: 'Do you want to logout?',
+    cancel: 'Cancel'
 }

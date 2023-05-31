@@ -1,6 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import cities from '@/models/locations.json'
-import {ref, computed, nextTick, watch} from 'vue'
+import {ref, computed, watch} from 'vue'
 import axios from "axios";
 import dayjs from "dayjs";
 
@@ -20,14 +20,14 @@ const selectedCityObject = computed(() => {
     return cities.find(c => c.city === selectedCity.value)
 })
 const currentWeather = ref(null)
-const weatherDateFormat = computed(()=> {
-    if(!currentWeather.value) return ''
+const weatherDateFormat = computed(() => {
+    if (!currentWeather.value) return ''
 
     const dt = currentWeather.value.time
     return dayjs(new Date(dt)).format('LLLL')
 })
 
-async function doSearch(term) {
+async function doSearch(term: string) {
     searchTerm.value = term
 }
 
@@ -38,7 +38,6 @@ watch(selectedCity, async () => {
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`
         const {data} = await axios.get(url)
         currentWeather.value = data.current_weather
-        // is_day, temperature, time, weathercode,winddirection,windspeed
     } catch (ex) {
         console.log(ex)
     }
@@ -51,17 +50,17 @@ watch(selectedCity, async () => {
         <div style="width: 700px; max-width: 100%;">
             <div>
                 <a-select
-                    v-model:value="selectedCity"
-                    :placeholder="$t('weather.placeholder')"
-                    style="width: 200px"
-                    show-arrow
-                    show-search
-                    @search="doSearch"
+                        v-model:value="selectedCity"
+                        :placeholder="$t('weather.placeholder')"
+                        style="width: 200px"
+                        show-arrow
+                        show-search
+                        @search="doSearch"
                 >
                     <a-select-option
-                        v-for="city in optimizedOptions"
-                        :key="city"
-                        :value="city"
+                            v-for="city in optimizedOptions"
+                            :key="city"
+                            :value="city"
                     />
                 </a-select>
             </div>
@@ -75,17 +74,18 @@ watch(selectedCity, async () => {
                         <span
                                 class="ant-statistic-content-value"><span class="content-temperature">
                             {{
-                                currentWeather.temperature
+                            currentWeather.temperature
                             }}<small class="suffix">°C</small>
                         </span></span>
                         <p class="content-info">
                             wind:&nbsp;{{ currentWeather.windspeed }}&nbsp;km/h
                         </p>
                         <p class="content-info">
-                            {{weatherDateFormat}}
+                            {{ weatherDateFormat }}
                         </p>
                         <p class="content-info">
-                            <a-switch :checked="currentWeather.is_day===1" checked-children="Day" un-checked-children="Night" />
+                            <a-switch :checked="currentWeather.is_day===1" checked-children="Day"
+                                      un-checked-children="Night"/>
                         </p>
                     </div>
                 </div>

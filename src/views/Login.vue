@@ -69,7 +69,6 @@ function onFinish() {
     auth.login(formModel).then((res) => {
         if (res.success) {
             showSuccess(`${t('messages.loginSuccess')}`)
-            console.log('login', res)
             if (res.data.user.theme) theme.changeTheme(res.data.user.theme)
             router.replace({path: '/'})
         } else {
@@ -86,7 +85,7 @@ const rules = {
     username: {
         type: 'string',
         required: true,
-        validator: formValidator(/[a-zA-Z0-9@.]/, t('common.userNameValidateMessage')),
+        validator: formValidator(/^[a-zA-Z0-9@.]/, t('common.userNameValidateMessage')),
         trigger: 'change',
     },
     password: {

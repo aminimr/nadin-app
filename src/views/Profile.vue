@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed, ref} from "vue";
-import {useAuthStore} from '@/stores/auth.ts';
-import {useThemeStore} from '@/stores/theme.ts';
+import {useAuthStore} from '@/stores/auth';
+import {useThemeStore} from '@/stores/theme';
 import FormControl from "../components/FormControl.vue";
 import {useI18n} from 'vue-i18n'
 import {useRouter} from "vue-router";
@@ -20,10 +20,11 @@ const theme = computed({
         return themeStore.theme
     },
     set(newTheme) {
-        themeStore.changeTheme(newTheme)
+        authStore.setUserInfo({theme: newTheme})
+        themeStore.changeTheme(authStore.userInfo.theme)
     }
 })
-
+const currentName = authStore.displayName
 const fullName = ref(authStore.displayName)
 
 function updateFullName() {
@@ -31,11 +32,8 @@ function updateFullName() {
     showSuccess(`${t('messages.changeNameSuccess')}`)
 }
 
-function logOut() {
-    authStore.logout()
-    router.replace({path: '/login'})
-    showSuccess(`${t('messages.logoutSuccess')}`)
-}
+
+
 
 </script>
 
@@ -45,13 +43,18 @@ function logOut() {
             <form-control :label="t('common.username')+':'">
                 <div style="display: flex ; justify-content: center ; align-items: center">
                     <a-input
-                        @keydown.enter="updateFullName"
+                            @keydown.enter="updateFullName"
                             size="large" v-model:value="fullName"
                             :placeholder="$t('common.title')">
                     </a-input>
                     <a-button type="primary"
-                              class="save-change">
-                        <check-outlined @click="updateFullName" html-type="submit"/>
+                              class="save-change"
+                              @click="updateFullName"
+                              :disabled="currentName === fullName || !fullName"
+                    >
+
+
+                        <check-outlined html-type="submit"/>
                     </a-button>
                 </div>
             </form-control>
@@ -74,7 +77,6 @@ function logOut() {
                 </a-select>
             </form-control>
             <a-divider/>
-            <a-button @click="logOut()" type="primary">Logout</a-button>
         </div>
 
     </section>
