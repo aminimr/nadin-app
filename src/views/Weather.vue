@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import cities from '@/models/locations.json'
 import {ref, computed, watch} from 'vue'
-import dayjs from "dayjs";
-import {getWeatherByLatLng} from "@/services/weatherService";
+import {getWeatherByLatLng, WeatherModel} from "@/services/weatherService";
 
+//#regioncity dropdown
 const searchTerm = ref('')
 const optimizedOptions = computed(() => cities
     .map(c => c.city)
@@ -19,27 +19,24 @@ const selectedCityObject = computed(() => {
 
     return cities.find(c => c.city === selectedCity.value)
 })
-const currentWeather = ref(null)
-const weatherDateFormat = computed(() => {
-    if (!currentWeather.value) return ''
-
-    const dt = currentWeather.value.time
-    return dayjs(new Date(dt)).format('LLLL')
-})
 
 async function doSearch(term: string) {
     searchTerm.value = term
 }
 
+//#endregion
+
+//#region weather
+const currentWeather = ref<WeatherModel | null>(null)
+
 watch(selectedCity, async () => {
     if (!selectedCityObject.value) return
     const {lng, lat} = selectedCityObject.value
-    getWeatherByLatLng({latitude: lng, longitude: lat}).then(({data}) => {
-        console.log(data.current_weather)
-        currentWeather.value = data.current_weather
+    getWeatherByLatLng({latitude: lng, longitude: lat}).then(weather => {
+        currentWeather.value = weather
     })
 })
-
+//#endregion
 </script>
 
 <template>
@@ -82,7 +79,7 @@ watch(selectedCity, async () => {
                             wind:&nbsp;{{ currentWeather.windspeed }}&nbsp;km/h
                         </p>
                         <p class="content-info">
-                            {{ weatherDateFormat }}
+                            {{ currentWeather.formatTime }}
                         </p>
                         <p class="content-info">
                             <a-switch :checked="currentWeather.is_day===1" checked-children="Day"
