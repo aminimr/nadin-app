@@ -15,12 +15,13 @@ export const useAuthStore = defineStore('auth', () => {
     const isLoggedIn = computed(() => !!token.value)
     const userInfo = ref<UserModel | null>(null)
     const displayName = computed(() => userInfo.value?.fullName || '')
+    const userId = computed(() => userInfo.value?.userId || '')
+    const userTheme = computed(() => userInfo.value?.theme || '')
+    const userLanguage = computed(() => userInfo.value?.lang || '')
 
-    function logout() {
-        userInfo.value = null
-        token.value = ''
-
-        localStorage.removeItem('token')
+    async function logout() {
+        clearSession()
+        return Promise.resolve()
     }
 
     function setUserInfo(user: EditableUserModel) {
@@ -48,6 +49,14 @@ export const useAuthStore = defineStore('auth', () => {
         } else {
             localStorage.removeItem('token')
         }
+    }
+
+    function clearSession(){
+        localStorage.removeItem(userId.value)
+        localStorage.removeItem('token')
+
+        userInfo.value = null
+        token.value = ''
     }
 
     async function login(user: AuthUser): Promise<SignInType> {
@@ -88,10 +97,14 @@ export const useAuthStore = defineStore('auth', () => {
         isLoggedIn,
         userInfo,
         displayName,
+        userTheme,
+        userLanguage,
+        userId,
         token,
         login,
         silentlyLogin,
         logout,
+        clearSession,
         setUserInfo,
     }
 })

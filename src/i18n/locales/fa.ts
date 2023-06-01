@@ -1,4 +1,5 @@
 export const common = {
+    fullName: 'نام نمایشی',
     username: 'نام کاربری',
     password: 'رمز عبور',
     userNameValidateMessage: 'لطفا نام کاربری را وارد کنید',
@@ -22,18 +23,27 @@ export const messages = {
     'loginError': 'لصفا نام کاربری یا رمز عبور خود را بررسی کنید',
     'loginFailed': 'نام کاربری یا رمز عبور اشتباه است',
     'logoutSuccess': 'خروج با موفقیت انجام شد',
-    'changeNameSuccess' : 'نام کاربری با موفقیت ثبت شد',
-    'todoFill':'لطفا عنوان را پر کنید'
+    changeNameSuccess : 'نام کاربری با موفقیت ثبت شد',
+    logOutMessage:'آیا میخواهید از این حساب کاربری خروج کنید؟',
+    'todoFill':'لطفا عنوان را وارد کنید',
+    'unauthorized':'جهت دسترسی به این بخش، ابتدا وارد شوید.',
+    'forbidden':'شما مجوز دسترسی به این بخش را ندارید.',
+    not_found: 'درخواست مورد نظر یافت نشد.',
+    server_error: 'خطا در سرور، لطفا در زمان دیگری مجددا سعی نمایید.',
+    unknown_error: 'خطا در درخواست.',
+    bad_request: 'درخواست ارسال شده معتبر نمی باشد.'
 }
 
 export const weather = {
-    placeholder: 'انتخاب شهر'
+    placeholder: 'انتخاب شهر',
+    label: 'انتخاب شهر',
 }
 
 export const themes = {
     green: 'سبز',
     blue: 'آبی',
-    yellow: 'زرد'
+    yellow: 'زرد',
+    purple: 'بنفش'
 }
 
 export const languages = {
@@ -41,12 +51,11 @@ export const languages = {
     persian: 'فارسی'
 }
 
-export const sidebar = {
+export const pages = {
     dashboard: 'داشبورد',
     todos: 'لیست انجام',
     weather: 'آب و هوا',
     profile: 'حساب کاربری',
     logout:'خروج',
-    logOutMessage:'آیا میخواهید از این حساب کاربری خروج کنید؟',
     cancel:'انصراف'
 }

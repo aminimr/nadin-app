@@ -16,10 +16,10 @@
             </label>
             <a-form-item
                     style="margin-top:5px"
-                    ref="username"
                     name="username"
+                    ref="username"
             >
-                <a-input v-model:value="formModel.username"/>
+                <a-input autofocus type="text" v-model:value="formModel.username"/>
             </a-form-item>
             <label>
                 {{ $t(`common.password`) }}
@@ -55,7 +55,7 @@ import {useThemeStore} from "@/stores/theme";
 const router = useRouter()
 const auth = useAuthStore()
 const theme = useThemeStore()
-const {t} = useI18n()
+const {t, locale} = useI18n()
 const {showSuccess, showError} = useNotification()
 
 // Form Model
@@ -68,8 +68,9 @@ const formModel = reactive<AuthUser>({
 function onFinish() {
     auth.login(formModel).then((res) => {
         if (res.success) {
+            locale.value = res.data.user.lang
+            theme.changeTheme(res.data.user.theme)
             showSuccess(`${t('messages.loginSuccess')}`)
-            if (res.data.user.theme) theme.changeTheme(res.data.user.theme)
             router.replace({path: '/'})
         } else {
             showError(`${t('messages.loginFailed')}`)
@@ -85,13 +86,13 @@ const rules = {
     username: {
         type: 'string',
         required: true,
-        validator: formValidator(/^[a-zA-Z0-9@.]/, t('common.userNameValidateMessage')),
+        validator: formValidator(/^[A-Za-z0-9_.@]{5,30}$/, t('common.userNameValidateMessage')),
         trigger: 'change',
     },
     password: {
         type: 'string',
         required: true,
-        validator: formValidator(/^[a-zA-Z0-9!@#$%^&*]{6,16}$/, t('common.passwordValidateMessage')),
+        validator: formValidator(/[a-zA-Z0-9!@#$%^&*]{6,16}$/, t('common.passwordValidateMessage')),
         trigger: 'change',
     }
 }

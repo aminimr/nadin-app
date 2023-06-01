@@ -4,6 +4,7 @@ import {useI18n} from "vue-i18n";
 import TimeStatus from '@/components/TimeStatus.vue'
 import dayjs from "dayjs";
 import {getCurrentTimeStatus} from "@/utils/DateTimeHelper";
+import PageWrapper from "@/components/PageWrapper.vue";
 
 const time = dayjs().format('H:mm')
 const dayStatus = getCurrentTimeStatus()
@@ -18,38 +19,34 @@ const displayMessage = t('messages.greeting', {
 </script>
 
 <template>
-    <div class="content-page">
-        <div class="center dashboard">
-            <div class="time">{{ time }}</div>
-            <div class="greeting">
-                <TimeStatus/>&nbsp;{{ displayMessage }}
+    <page-wrapper :title="$t('pages.dashboard')">
+        <div class="dashboard">
+            <div style="margin-bottom: 24px"><span class="time">{{ time }}</span></div>
+            <div>
+                <div class="greeting">
+                    <TimeStatus/>&nbsp;{{ displayMessage }}
+                </div>
             </div>
         </div>
-    </div>
+    </page-wrapper>
 
 </template>
 <style lang="scss">
 .dashboard {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  width: 400px;
-  max-width: 100%;
 
   .time {
     font-size: 64px;
     font-weight: bold;
     line-height: 1;
-    margin-bottom: 24px;
   }
 
   .greeting {
     font-size: 28px;
     align-items: center;
     vertical-align: middle;
-    display: flex;
+    display: inline-flex;
     background-color: #eee;
-    padding: 4px 8px;
+    padding: 8px 16px;
     border-radius: 4px;
     font-weight: 500;
   }

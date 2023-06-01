@@ -9,29 +9,29 @@
         <a-menu theme="dark" mode="inline" @click="onMenuClicked" v-model:selectedKeys="selectedMenu">
             <a-menu-item key="dashboard">
                 <appstore-outlined/>
-                <span class="nav-text">{{ $t('sidebar.dashboard') }}</span>
+                <span class="nav-text">{{ $t('pages.dashboard') }}</span>
             </a-menu-item>
             <a-menu-item key="todos">
                 <profile-outlined/>
-                <span class="nav-text">{{ $t('sidebar.todos') }}</span>
+                <span class="nav-text">{{ $t('pages.todos') }}</span>
             </a-menu-item>
             <a-menu-item key="weather">
                 <cloud-outlined/>
-                <span class="nav-text">{{ $t('sidebar.weather') }}</span>
+                <span class="nav-text">{{ $t('pages.weather') }}</span>
             </a-menu-item>
             <a-menu-item key="profile">
                 <user-outlined/>
-                <span class="nav-text">{{ $t('sidebar.profile') }}</span>
+                <span class="nav-text">{{ $t('pages.profile') }}</span>
             </a-menu-item>
             <a-menu-item key="logout">
                 <export-outlined/>
-                <span class="nav-text">{{ $t('sidebar.logout') }}</span>
+                <span class="nav-text">{{ $t('pages.logout') }}</span>
                 <a-modal v-model:visible="visible">
-                    <p>{{ $t('sidebar.logOutMessage') }}</p>
+                    <p>{{ $t('messages.logOutMessage') }}</p>
                     <template #footer>
-                        <a-button key="back" @click="handleCancel">{{ $t('sidebar.cancel') }}</a-button>
+                        <a-button key="back" @click="handleCancel">{{ $t('pages.cancel') }}</a-button>
                         <a-button key="submit" type="primary" :loading="loading" @click="handleOk">{{
-                            $t('sidebar.logout')
+                            $t('pages.logout')
                             }}</a-button>
                     </template>
                 </a-modal>

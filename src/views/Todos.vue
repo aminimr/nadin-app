@@ -1,20 +1,23 @@
 <script setup lang="ts">
-import {ref, reactive} from 'vue';
+import {ref, reactive, onMounted} from 'vue';
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons-vue';
-import {formValidator} from "../utils/FormValidator";
+import {formValidator} from "@/utils/FormValidator";
 import {useI18n} from "vue-i18n";
 import {useNotification} from "@/utils/NotificationManager";
+import PageWrapper from "@/components/PageWrapper.vue";
 
 const {t} = useI18n()
 const props = defineProps({
     testMode: Boolean
 })
-const {showSuccess, showError} = useNotification()
+const {showError} = useNotification()
 
 interface IFormModel {
     title: string,
     checked: boolean
 }
+
+const todoInput = ref<HTMLInputElement | null>(null)
 
 const formModel = reactive<IFormModel>({
     title: '',
@@ -60,18 +63,19 @@ function addTodo() {
     todos.value.push({
         ...formModel
     })
-    showSuccess(`${t('messages.todoFill')}`)
     formModel.title = ''
     formModel.checked = false
 }
 
-const result = ref('')
+onMounted(() => {
+    todoInput.value?.focus()
+})
 
 </script>
 
 <template>
-    <section style="display: flex ; justify-content: center">
-        <div class="content-page" style="min-width: 300px; width: 500px; max-width: 100%;">
+    <page-wrapper :title="$t('pages.todos')">
+        <div style="width: 360px; max-width: 100%">
             <a-form
                     :model="formModel"
                     autocomplete="off"
@@ -82,6 +86,8 @@ const result = ref('')
                         ref="title"
                         name="title">
                     <a-input
+                            ref="todoInput"
+                            autofocus
                             @keydown.enter="addTodo" size="large" v-model:value="formModel.title"
                             :placeholder="$t('common.title')">
                         <template #suffix>
@@ -112,7 +118,7 @@ const result = ref('')
                 </template>
             </a-list>
         </div>
-    </section>
+    </page-wrapper>
 </template>
 
 

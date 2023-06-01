@@ -1,8 +1,8 @@
 import {createApp} from 'vue'
-import registerPlugins from './boot/plugins.js'
-import registerComponents from './boot/registerComponents.js'
+import registerPlugins from './boot/plugins'
+import registerComponents from './boot/registerComponents'
 import App from './App.vue'
-import i18n from "./i18n"
+import i18n from "./i18n/index"
 
 import './css/app.scss'
 

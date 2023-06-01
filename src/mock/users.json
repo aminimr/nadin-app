@@ -3,9 +3,18 @@
     "userId": "e18a7882-5c55-489f-b371-11f7a965a7ca",
     "username": "admin",
     "password": "Admin@123",
-    "fullName": "Admin",
+    "fullName": "حسینی",
     "lang": "fa",
     "theme": "green",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+  },
+  {
+    "userId": "3af750f6-c20c-4816-94e7-e72acb93bd06",
+    "username": "user1",
+    "password": "P@ss123",
+    "fullName": "John Smith",
+    "lang": "en",
+    "theme": "yellow",
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6InVzZXIxIiwiZXhwIjoxNjg1NTY2OTUzLCJpYXQiOjE2ODU1NjY5NTN9.1wEiGFg4eRf0rwjeaa5LoAerSp7z8Y61GJVZTqjgwJM"
   }
 ]

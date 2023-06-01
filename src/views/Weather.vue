@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import cities from '@/models/locations.json'
 import {ref, computed, watch} from 'vue'
-import axios from "axios";
 import dayjs from "dayjs";
+import {getWeatherByLatLng} from "@/services/weatherService";
 
 const searchTerm = ref('')
 const optimizedOptions = computed(() => cities
@@ -33,38 +33,39 @@ async function doSearch(term: string) {
 
 watch(selectedCity, async () => {
     if (!selectedCityObject.value) return
-    try {
-        const {lng, lat} = selectedCityObject.value
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`
-        const {data} = await axios.get(url)
+    const {lng, lat} = selectedCityObject.value
+    getWeatherByLatLng({latitude: lng, longitude: lat}).then(({data}) => {
+        console.log(data.current_weather)
         currentWeather.value = data.current_weather
-    } catch (ex) {
-        console.log(ex)
-    }
+    })
 })
 
 </script>
 
 <template>
-    <div class="content-page">
-        <div style="width: 700px; max-width: 100%;">
-            <div>
-                <a-select
-                        v-model:value="selectedCity"
-                        :placeholder="$t('weather.placeholder')"
-                        style="width: 200px"
-                        show-arrow
-                        show-search
-                        @search="doSearch"
-                >
-                    <a-select-option
-                            v-for="city in optimizedOptions"
-                            :key="city"
-                            :value="city"
-                    />
-                </a-select>
-            </div>
-            <a-divider v-if="!!selectedCityObject && !!currentWeather"/>
+    <page-wrapper :title="$t('pages.weather')">
+        <div style="width: 500px; max-width: 100%">
+            <a-form>
+                <a-form-item
+                        :label="$t('weather.label')"
+                        ref="fullName"
+                        name="fullName">
+                    <a-select
+                            v-model:value="selectedCity"
+                            :placeholder="$t('weather.placeholder')"
+                            style="width: 200px"
+                            show-arrow
+                            show-search
+                            @search="doSearch"
+                    >
+                        <a-select-option
+                                v-for="city in optimizedOptions"
+                                :key="city"
+                                :value="city"
+                        />
+                    </a-select>
+                </a-form-item>
+            </a-form>
             <div v-if="!!selectedCityObject && !!currentWeather">
                 <div class="ant-statistic weather-widget">
                     <div class="ant-statistic-title">
@@ -91,7 +92,7 @@ watch(selectedCity, async () => {
                 </div>
             </div>
         </div>
-    </div>
+    </page-wrapper>
 </template>
 <style lang="scss">
 .weather-widget {
