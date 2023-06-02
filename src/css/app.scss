@@ -31,3 +31,11 @@
   display: block;
   max-width: 90vw;
 }
+
+body[dir="rtl"] {
+  .ant-layout-sider-zero-width-trigger {
+    right: auto !important;
+    left: -36px !important;
+    border-radius: 2px 0 0 2px;
+  }
+}

@@ -42,9 +42,10 @@ const theme = computed({
     }
 })
 
-const isFullNameChanged = computed(() => authStore.displayName !== formModel.fullName)
+const isFullNameChanged = computed(() => (authStore.displayName !== formModel.fullName) && formModel.fullName.length > 0)
 
 function updateFullName() {
+    if(!isFullNameChanged.value) return
     authStore.setUserInfo({fullName: formModel.fullName})
     showSuccess(`${t('messages.changeNameSuccess')}`)
 }

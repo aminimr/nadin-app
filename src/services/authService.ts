@@ -20,8 +20,6 @@ export type EditableUserModel = {
     theme?: string
 }
 
-export type Token = string
-
 export type SignInType = {
     success: boolean,
     data: any,
@@ -37,9 +35,9 @@ export function getUserFromLocalStorage(userId: string): UserModel | null {
 export function updateUserFromLocalStorage(userId: string, user: UserModel): UserModel {
     const storageUser = getUserFromLocalStorage(user.userId)
     if (storageUser) {
-        user.fullName = storageUser.fullName || user.fullName
-        user.theme = storageUser.theme || user.theme
-        user.lang = storageUser.lang || user.lang
+        user.fullName = storageUser.fullName ?? user.fullName
+        user.theme = storageUser.theme ?? user.theme
+        user.lang = storageUser.lang ?? user.lang
     }
 
     return {
@@ -58,7 +56,6 @@ export async function loginByPasskey(user: AuthUser): Promise<SignInType> {
         const isPasswordMatch = user.password === u.password
         if (isUsernameMatch && isPasswordMatch) {
             const userInfo = updateUserFromLocalStorage(u.userId, u as UserModel)
-            console.log('userInfo', userInfo)
             return Promise.resolve({
                 success: true,
                 data: {
@@ -77,7 +74,7 @@ export async function loginByPasskey(user: AuthUser): Promise<SignInType> {
     })
 }
 
-export async function loginByToken(token: Token): Promise<SignInType> {
+export async function loginByToken(token: string): Promise<SignInType> {
     let defaultResponse = {
         success: false,
         msg: '',
@@ -88,7 +85,6 @@ export async function loginByToken(token: Token): Promise<SignInType> {
     for (let u of mockUsers) {
         if (u.token === token) {
             const userInfo = updateUserFromLocalStorage(u.userId, u as UserModel)
-            console.log('userInfo', userInfo)
             return Promise.resolve({
                 success: true,
                 data: {

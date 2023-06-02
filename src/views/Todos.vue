@@ -3,21 +3,20 @@ import {ref, reactive, onMounted} from 'vue';
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons-vue';
 import {formValidator} from "@/utils/FormValidator";
 import {useI18n} from "vue-i18n";
+import type {FormInstance, Input} from 'ant-design-vue';
 import {useNotification} from "@/utils/NotificationManager";
 import PageWrapper from "@/components/PageWrapper.vue";
 
 const {t} = useI18n()
-const props = defineProps({
-    testMode: Boolean
-})
-const {showError} = useNotification()
+const {showError, showWarning} = useNotification()
+const formRef = ref<FormInstance>()
 
 interface IFormModel {
     title: string,
     checked: boolean
 }
 
-const todoInput = ref<HTMLInputElement | null>(null)
+const todoInput = ref<typeof Input>()
 
 const formModel = reactive<IFormModel>({
     title: '',
@@ -56,7 +55,44 @@ function removeTodo(item: object) {
     todos.value = todos.value.filter(todo => item !== todo)
 }
 
-function addTodo() {
+/*{
+    "values": {
+    "title": ""
+},
+    "errorFields": [
+    {
+        "name": [
+            "title"
+        ],
+        "errors": [
+            "Please fill the Title"
+        ],
+        "warnings": []
+    }
+],
+    "outOfDate": false
+}*/
+type formErrorResult = {
+    errorFields: [{
+        name: string[],
+        errors: string[],
+        warnings: string[]
+    }]
+}
+
+function errorHandling(e: formErrorResult) {
+    const errors = e.errorFields.map(({errors}) => errors.length > 0 ? errors[0] : '').filter(Boolean)
+    const warnings = e.errorFields.map(({warnings}) => warnings.length > 0 ? warnings[0] : '').filter(Boolean)
+    for(const msg of errors){
+        showError(msg)
+    }
+    for(const msg of warnings){
+        showWarning(msg)
+    }
+    focusTodoInput()
+}
+
+function formSubmit() {
     if (!formModel.title.trim()) {
         return showError(`${t('messages.todoFill')}`)
     }
@@ -65,10 +101,17 @@ function addTodo() {
     })
     formModel.title = ''
     formModel.checked = false
+
+    formRef.value?.resetFields()
+    focusTodoInput()
+}
+
+function focusTodoInput(){
+    todoInput.value?.focus()
 }
 
 onMounted(() => {
-    todoInput.value?.focus()
+    focusTodoInput()
 })
 
 </script>
@@ -79,21 +122,24 @@ onMounted(() => {
             <a-form
                     :model="formModel"
                     autocomplete="off"
-                    @finish="addTodo"
+                    @finish="formSubmit"
+                    @finishFailed="errorHandling"
                     :rules="rules"
+                    ref="formRef"
             >
                 <a-form-item
-                        ref="title"
                         name="title">
                     <a-input
                             ref="todoInput"
-                            autofocus
-                            @keydown.enter="addTodo" size="large" v-model:value="formModel.title"
+                            size="large"
+                            v-model:value="formModel.title"
                             :placeholder="$t('common.title')">
                         <template #suffix>
-                            <PlusOutlined @click="addTodo"
-                                          html-type="submit"
-                                          :style="{fontSize: '18px', color: '#777'}"/>
+                            <a-button html-type="submit" shape="circle">
+                                <template #icon>
+                                    <PlusOutlined/>
+                                </template>
+                            </a-button>
                         </template>
                     </a-input>
                 </a-form-item>

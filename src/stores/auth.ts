@@ -1,9 +1,10 @@
 import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
+import {useThemeStore} from "@/stores/theme";
+import i18n from '@/i18n'
 import {
     AuthUser,
     UserModel,
-    Token,
     SignInType,
     loginByPasskey,
     loginByToken,
@@ -11,13 +12,13 @@ import {
 } from '@/services/authService'
 
 export const useAuthStore = defineStore('auth', () => {
-    const token = ref<Token>('')
+    const token = ref<string>('')
     const isLoggedIn = computed(() => !!token.value)
     const userInfo = ref<UserModel | null>(null)
-    const displayName = computed(() => userInfo.value?.fullName || '')
-    const userId = computed(() => userInfo.value?.userId || '')
-    const userTheme = computed(() => userInfo.value?.theme || '')
-    const userLanguage = computed(() => userInfo.value?.lang || '')
+    const displayName = computed(() => userInfo.value?.fullName ?? '')
+    const userId = computed(() => userInfo.value?.userId ?? '')
+    const userTheme = computed(() => userInfo.value?.theme ?? '')
+    const userLanguage = computed(() => userInfo.value?.lang ?? '')
 
     async function logout() {
         clearSession()
@@ -35,7 +36,7 @@ export const useAuthStore = defineStore('auth', () => {
         localStorage.setItem(userInfo.value.userId, JSON.stringify(userInfo.value))
     }
 
-    function createSession(user: UserModel, accessToken: Token, persist: boolean = true) {
+    function createSession(user: UserModel, accessToken: string, persist: boolean = true) {
         userInfo.value = user
 
         // save user info in localStorage
@@ -49,10 +50,18 @@ export const useAuthStore = defineStore('auth', () => {
         } else {
             localStorage.removeItem('token')
         }
+
+        // apply user theme
+        const themeStore = useThemeStore()
+        themeStore.changeTheme(user.theme)
+
+        // apply user language
+        const {locale} = i18n.global
+        locale.value = user.lang as "en" | "fa"
     }
 
-    function clearSession(){
-        localStorage.removeItem(userId.value)
+    function clearSession() {
+        // localStorage.removeItem(userId.value)
         localStorage.removeItem('token')
 
         userInfo.value = null
@@ -76,7 +85,7 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    async function silentlyLogin(accessToken: Token): Promise<SignInType> {
+    async function silentlyLogin(accessToken: string): Promise<SignInType> {
         try {
             const res = await loginByToken(accessToken)
             if (res.success) { // login is ok

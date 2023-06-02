@@ -35,6 +35,7 @@ export function useNotification() {
     return {
         showSuccess: (message: string, options?: INotifyProps) => createNotification('success', message, options),
         showError: (message: string, options?: INotifyProps) => createNotification('error', message, options),
+        showWarning: (message: string, options?: INotifyProps) => createNotification('warning', message, options),
         showInfo: (message: string, options?: INotifyProps) => createNotification('info', message, options),
     }
 }

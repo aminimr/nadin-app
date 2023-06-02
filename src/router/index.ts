@@ -4,7 +4,7 @@ import {useAuthStore} from "@/stores/auth";
 import Dashboard from '../views/Dashboard.vue'
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.VITE_BASE_URL),
+    history: createWebHistory(import.meta.env.VITE_BASE),
     routes: [
         {
             path: '/',
@@ -47,6 +47,9 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     const auth = useAuthStore()
+
+    if(!auth.isLoggedIn) await auth.silentlyLogin(localStorage.token)
+
     if (auth.isLoggedIn || !!to.meta.public) return next()
 
     return next({path: 'login'})

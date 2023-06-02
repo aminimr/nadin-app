@@ -18,8 +18,8 @@ export const useThemeStore = defineStore('theme', () => {
         changeTheme(DEFAULT_THEME)
     }
 
-    function changeTheme(value: string) {
-        if (!allowedThemes.includes(value) || value === null) return
+    function changeTheme(value: string | undefined) {
+        if (!value || !allowedThemes.includes(value)) return
         theme.value = value
 
         ConfigProvider.config({

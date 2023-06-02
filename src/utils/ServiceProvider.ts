@@ -21,7 +21,7 @@ class ServiceProvider {
 
     constructor() {
         this.http = axios.create({
-            baseURL: import.meta.env.VITE_BASE_URL,
+            baseURL: import.meta.env.VITE_API_URL,
             timeout: 5000
         });
         this.http.defaults.headers.common['Accept'] = 'application/json;charset=UTF-8';

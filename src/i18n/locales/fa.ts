@@ -20,7 +20,7 @@ export const common = {
 export const messages = {
     'greeting': '{status} بخیر, {username}',
     'loginSuccess': 'ورود با موفقیت انجام شد',
-    'loginError': 'لصفا نام کاربری یا رمز عبور خود را بررسی کنید',
+    'loginError': 'نام کاربری یا کلمه عبور معتبر نیست.',
     'loginFailed': 'نام کاربری یا رمز عبور اشتباه است',
     'logoutSuccess': 'خروج با موفقیت انجام شد',
     changeNameSuccess : 'نام کاربری با موفقیت ثبت شد',
