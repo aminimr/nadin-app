@@ -19,7 +19,7 @@
                     name="username"
                     ref="username"
             >
-                <a-input autofocus type="text" v-model:value="formModel.username"/>
+                <a-input id="username" autofocus type="text" v-model:value="formModel.username"/>
             </a-form-item>
             <label>
                 {{ $t(`common.password`) }}
@@ -29,7 +29,7 @@
                     name="password"
                     ref="password"
             >
-                <a-input-password v-model:value="formModel.password"/>
+                <a-input-password id="password" v-model:value="formModel.password"/>
             </a-form-item>
 
             <a-form-item style="margin-top: 20px">

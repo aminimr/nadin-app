@@ -1,5 +1,5 @@
 import { defineConfig } from "cypress";
-import vitePreprocessor from 'cypress-vite'
+import vitePreprocessor from "cypress-vite";
 
 export default defineConfig({
   component: {
@@ -9,8 +9,14 @@ export default defineConfig({
     },
     e2e: {
       setupNodeEvents(on) {
-        on('file:preprocessor', vitePreprocessor())
+        on("file:preprocessor", vitePreprocessor());
       },
+    },
+  },
+
+  e2e: {
+    setupNodeEvents(on, config) {
+      // implement node event listeners here
     },
   },
 });
