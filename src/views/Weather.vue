@@ -5,6 +5,7 @@ import {getWeatherByLatLng, WeatherModel} from "@/services/weatherService";
 
 //#regioncity dropdown
 const searchTerm = ref('')
+const loading = ref(false)
 const optimizedOptions = computed(() => cities
     .map(c => c.city)
     .filter(city => {
@@ -32,8 +33,11 @@ const currentWeather = ref<WeatherModel | null>(null)
 watch(selectedCity, async () => {
     if (!selectedCityObject.value) return
     const {lng, lat} = selectedCityObject.value
+    loading.value = true
     getWeatherByLatLng({latitude: lng, longitude: lat}).then(weather => {
         currentWeather.value = weather
+    }).finally(()=> {
+        loading.value = false
     })
 })
 //#endregion
@@ -63,6 +67,7 @@ watch(selectedCity, async () => {
                     </a-select>
                 </a-form-item>
             </a-form>
+            <a-spin v-if="loading" />
             <div v-if="!!selectedCityObject && !!currentWeather">
                 <div class="ant-statistic weather-widget">
                     <div class="ant-statistic-title">

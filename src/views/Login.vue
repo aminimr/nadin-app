@@ -65,17 +65,20 @@ const formModel = reactive<AuthUser>({
     persist: true
 });
 
-function onFinish() {
-    auth.login(formModel).then((res) => {
+async function onFinish() {
+    try {
+        const res = await auth.login(formModel)
         if (res.success) {
             locale.value = res.data.user.lang
             theme.changeTheme(res.data.user.theme)
             showSuccess(`${t('messages.loginSuccess')}`)
-            router.replace({path: '/'})
+            await router.replace({path: '/'})
         } else {
             showError(`${t('messages.loginFailed')}`)
         }
-    })
+    } catch (ex) {
+        showError(`${t('messages.loginFailed')}`)
+    }
 }
 
 function onFinishFailed() {
